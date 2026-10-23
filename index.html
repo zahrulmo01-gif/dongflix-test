@@ -511,7 +511,6 @@
     }
     .badge-bottom.movie { color: #fbbf24; border-color: rgba(245, 158, 11, 0.35); }
 
-    /* JUDUL KARTU DONGHUA TERBARU & MOVIE DIPERBESAR SEDIKIT */
     .card-title { 
       margin-top: 8px; 
       font-size: 13px; 
@@ -527,7 +526,7 @@
     .see-all-btn.movie { color: var(--color-movie); }
 
     /* ========================================================
-       POPULER HARI INI: PENUH SAMPAI BAWAH & SINOPSIS PANJANG
+       SHARED COMPONENT: FEATURED CARD STYLING (CAROUSEL & VERTICAL)
        ======================================================== */
     .popular-featured-row {
       display: flex;
@@ -542,13 +541,30 @@
     .popular-featured-card {
       flex: 0 0 88%;
       max-width: 380px;
-      height: 185px; /* Tinggi sejajar dengan cover */
+      height: 185px;
       display: flex;
       gap: 14px;
-      align-items: stretch; /* Mengisi penuh tinggi kartu */
+      align-items: stretch;
       text-decoration: none;
       cursor: pointer;
       scroll-snap-align: start;
+      transition: transform 0.2s ease;
+    }
+
+    .popular-vertical-list {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .popular-vertical-list .popular-featured-card {
+      flex: 1 1 auto;
+      max-width: 100%;
+      height: 185px;
+    }
+
+    .popular-featured-card:hover {
+      transform: translateY(-3px);
     }
 
     .featured-thumb-box {
@@ -589,14 +605,17 @@
       height: 100%;
       display: flex;
       flex-direction: column;
-      justify-content: space-between; /* Menjangkau dari atas hingga batas bawah kartu */
+      overflow: hidden;
       padding: 2px 0;
     }
 
     .featured-text-top {
       display: flex;
       flex-direction: column;
-      gap: 5px;
+      gap: 4px;
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
     }
 
     .featured-title {
@@ -608,17 +627,18 @@
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
+      flex-shrink: 0;
     }
 
-    /* Sinopsis tidak cuma 1 baris, penuh 3-4 baris */
+    /* Sinopsis otomatis mengisi sisa ruang tanpa batas baris kaku */
     .featured-synopsis {
       font-size: 11px;
       color: #94a3b8;
       line-height: 1.4;
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
+      flex: 1;
+      min-height: 0;
       overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .featured-genres {
@@ -631,11 +651,12 @@
       -webkit-box-orient: vertical;
       overflow: hidden;
       margin-top: 2px;
+      flex-shrink: 0;
     }
 
     .featured-pill-btn {
       align-self: flex-start;
-      margin-top: auto; /* Memaksa tombol tetap di paling bawah */
+      margin-top: 6px;
       display: inline-flex;
       align-items: center;
       background: #1c1c1e;
@@ -646,105 +667,7 @@
       padding: 6px 14px;
       border-radius: 9999px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-    }
-
-    /* ========================================================
-       DONGHUA POPULER: COVER DIPERBESAR & MINIMALIS
-       ======================================================== */
-    .popular-vertical-list {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .vertical-list-card {
-      display: flex;
-      align-items: flex-start;
-      gap: 16px;
-      background: transparent;
-      border: none;
-      padding: 0;
-      text-decoration: none;
-      cursor: pointer;
-      transition: transform 0.2s ease;
-    }
-
-    .vertical-list-card:hover {
-      transform: translateX(4px);
-    }
-
-    /* Cover diperbesar */
-    .vertical-thumb-box {
-      width: 98px;
-      min-width: 98px;
-      height: 135px;
-      border-radius: 14px;
-      overflow: hidden;
       flex-shrink: 0;
-      background: #111;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
-    }
-
-    .vertical-thumb-box img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .vertical-info-col {
-      flex: 1;
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .vertical-item-title {
-      font-size: 16px;
-      font-weight: 700;
-      color: #ffffff;
-      line-height: 1.3;
-      display: -webkit-box;
-      -webkit-line-clamp: 1;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-
-    .vertical-synopsis {
-      font-size: 11.5px;
-      color: #94a3b8;
-      line-height: 1.45;
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-
-    .vertical-tags-row {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex-wrap: wrap;
-      margin-top: 2px;
-    }
-
-    .category-chip {
-      background: #1c1c24;
-      color: #94a3b8;
-      font-size: 10.5px;
-      font-weight: 600;
-      padding: 3px 8px;
-      border-radius: 6px;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-    }
-
-    .vertical-status-text {
-      font-size: 11.5px;
-      color: var(--color-accent);
-      font-weight: 700;
-      margin-top: 2px;
     }
 
     /* FLOATING BOTTOM ON-TOP */
@@ -817,7 +740,7 @@
         flex: 0 0 calc((100% - 75px) / 6); 
         min-width: calc((100% - 75px) / 6); 
       }
-      .popular-featured-card {
+      .popular-featured-row .popular-featured-card {
         flex: 0 0 calc((100% - 32px) / 3);
         max-width: 380px;
       }
@@ -842,14 +765,6 @@
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         gap: 22px 28px;
-      }
-      .vertical-thumb-box {
-        width: 105px;
-        min-width: 105px;
-        height: 145px;
-      }
-      .vertical-item-title {
-        font-size: 17px;
       }
     }
 
@@ -946,7 +861,7 @@
       <div class="scroll-row" id="continueRow"></div>
     </section>
 
-    <!-- 2. POPULER HARI INI (PENUH SAMPAI BAWAH) -->
+    <!-- 2. POPULER HARI INI (HORIZONTAL SCROLL) -->
     <section class="section-block">
       <div class="section-header-flex">
         <h2 class="section-title">
@@ -960,8 +875,7 @@
           <div class="featured-info-col">
             <div class="featured-text-top">
               <div class="skeleton" style="height: 18px; width: 80%;"></div>
-              <div class="skeleton" style="height: 12px; width: 95%;"></div>
-              <div class="skeleton" style="height: 12px; width: 85%;"></div>
+              <div class="skeleton" style="height: 48px; width: 95%;"></div>
               <div class="skeleton" style="height: 12px; width: 60%;"></div>
             </div>
             <div class="skeleton" style="height: 28px; width: 110px; border-radius: 9999px;"></div>
@@ -1002,7 +916,7 @@
       </div>
     </section>
 
-    <!-- 5. DONGHUA POPULER (COVER DIPERBESAR) -->
+    <!-- 5. DONGHUA POPULER (TAMPILAN SAMA DENGAN POPULER HARI INI, SUSUNAN LIST KE BAWAH, MAKSIMAL 6) -->
     <section class="section-block">
       <div class="section-header-flex">
         <h2 class="section-title">
@@ -1011,9 +925,8 @@
         </h2>
       </div>
       <div class="popular-vertical-list" id="popularAllGrid">
-        <div class="vertical-list-card skeleton" style="height: 135px;"></div>
-        <div class="vertical-list-card skeleton" style="height: 135px;"></div>
-        <div class="vertical-list-card skeleton" style="height: 135px;"></div>
+        <div class="popular-featured-card skeleton" style="height: 185px;"></div>
+        <div class="popular-featured-card skeleton" style="height: 185px;"></div>
       </div>
     </section>
   </div>
@@ -1254,7 +1167,7 @@
       }, 4000);
     }
 
-    /* 1. POPULER HARI INI: SINOPSIS PANJANG & MENGISI PENUH SAMPAI BAWAH */
+    /* KARTU GAYA GAMBAR TAUTAN (DIGUNAKAN UNTUK POPULER HARI INI & DONGHUA POPULER) */
     function createPopularFeaturedCard(item) {
       const card = document.createElement('a');
       card.className = 'popular-featured-card';
@@ -1268,7 +1181,7 @@
       const epNum = item['latest-episode'] || (item.episode ? item.episode.replace(/[^0-9]/g, '') : '1');
       const badgeText = isMovie ? 'Movie' : `Ep ${epNum} / ${statusText === 'COMPLETED' ? 'Completed' : 'Ongoing'}`;
 
-      const synopsisText = item.synopsis || item.description || item.desc || `${titleText} menceritakan petualangan kultivasi tanpa sihir yang penuh pertarungan hebat di dunia persilatan spiritual.`;
+      const synopsisText = item.synopsis || item.description || item.desc || `${titleText} – Dunia tanpa sihir, tanpa pertempuran Dou Qi, namun memiliki Martial Soul yang megah. Ikuti petualangan legendaris Tang Sect di benua Douluo yang penuh rintangan mistis dan pertempuran epik melawan takdir.`;
 
       let genresFormatted = 'Action • Adventure • Fantasy • Romance';
       if (Array.isArray(item.genres) && item.genres.length > 0) {
@@ -1289,44 +1202,6 @@
           <div class="featured-pill-btn">
             <span>${badgeText}</span>
           </div>
-        </div>
-      `;
-
-      return card;
-    }
-
-    /* 2. DONGHUA POPULER: FORMAT LIST KE BAWAH DENGAN COVER DIPERBESAR */
-    function createVerticalListCard(item) {
-      const card = document.createElement('a');
-      card.className = 'vertical-list-card';
-      card.href = `/donghua/${encodeURIComponent(item.slug)}`;
-
-      const titleText = sanitizeTitle(item.title);
-      const posterUrl = getImageUrl(item);
-      const isMovie = isMovieItem(item);
-      
-      const statusText = parseStatusText(item);
-      const epNum = item['latest-episode'] || (item.episode ? item.episode.replace(/[^0-9]/g, '') : '1');
-      const epOngoingText = isMovie ? 'Movie' : `Ep ${epNum} / ${statusText === 'COMPLETED' ? 'Completed' : 'Ongoing'}`;
-
-      const synopsisText = item.synopsis || item.description || item.desc || `${titleText} menyajikan kisah aksi fantasi terbaik dengan visual animasi memukau dan pertarungan sengit.`;
-
-      let genreChipsHtml = '<span class="category-chip">Action</span><span class="category-chip">Fantasy</span>';
-      if (Array.isArray(item.genres) && item.genres.length > 0) {
-        genreChipsHtml = item.genres.slice(0, 2).map(g => `<span class="category-chip">${g}</span>`).join('');
-      }
-
-      card.innerHTML = `
-        <div class="vertical-thumb-box">
-          <img src="${posterUrl}" alt="${titleText}" loading="lazy" referrerpolicy="no-referrer" onerror="handleMissingImage(this)" />
-        </div>
-        <div class="vertical-info-col">
-          <h3 class="vertical-item-title">${titleText}</h3>
-          <p class="vertical-synopsis">${synopsisText}</p>
-          <div class="vertical-tags-row">
-            ${genreChipsHtml}
-          </div>
-          <span class="vertical-status-text">${epOngoingText}</span>
         </div>
       `;
 
@@ -1419,18 +1294,6 @@
       }
     }
 
-    function renderVerticalPopular(list, targetElement) {
-      if (!targetElement) return;
-      targetElement.innerHTML = '';
-      if (Array.isArray(list) && list.length > 0) {
-        list.forEach(item => {
-          if (item && item.title) targetElement.appendChild(createVerticalListCard(item));
-        });
-      } else {
-        targetElement.innerHTML = '<p style="color: var(--text-muted); font-size: 12px; grid-column: 1 / -1;">Data tidak tersedia.</p>';
-      }
-    }
-
     async function loadMainData() {
       const todayPopularRow = document.getElementById('todayPopularRow');
       const latestGrid = document.getElementById('latestGrid');
@@ -1448,17 +1311,17 @@
 
         renderHeroSlider(masterList);
 
-        // 1. Populer Hari ini (Penuh rata sampai bawah & sinopsis panjang)
+        // 1. Populer Hari ini (Horizontal Scroll)
         renderPopularFeatured(masterList.slice(0, 6), todayPopularRow);
 
-        // 2. Donghua Terbaru (Judul diperbesar)
+        // 2. Donghua Terbaru (12 Item Grid)
         renderGridItems(donghuaList.slice(0, 12), latestGrid);
 
-        // 3. Movie Terbaru (Judul diperbesar)
+        // 3. Movie Terbaru (12 Item Grid)
         renderGridItems(movieList.slice(0, 12), movieGrid);
 
-        // 4. Donghua Populer (List Ke Bawah & Cover Diperbesar)
-        renderVerticalPopular(donghuaList.slice(12, 24), popAllGrid);
+        // 4. Donghua Populer (Dibatasi 6 item saja, disusun ke bawah menggunakan card yang sama)
+        renderPopularFeatured(donghuaList.slice(6, 12), popAllGrid);
 
       } catch (e) {
         if (latestGrid) latestGrid.innerHTML = `<p style="color: #ef4444; font-size: 12px; grid-column: 1 / -1;">Gagal memuat katalog donghua.</p>`;
