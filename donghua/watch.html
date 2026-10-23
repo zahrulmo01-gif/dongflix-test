@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title id="pageTitle">Dongflix - Detail</title>
+  <meta name="referrer" content="no-referrer">
+
+  <script type="module" src="/assets/firebase-config.js"></script>
+
+  <style>
+    :root {
+      --bg-main: #000000;
+      --bg-card: #0a0a0a;
+      --bg-skeleton: #121212;
+      --color-primary: #0284c7;
+      --color-primary-hover: #0369a1;
+      --color-accent: #38bdf8;
+      --color-movie: #f59e0b;
+      --color-star: #f59e0b;
+      --text-main: #ffffff;
+      --text-sub: #d1d5db;
+      --text-muted: #9ca3af;
+      --border-color: rgba(255, 255, 255, 0.1);
+      /* iOS Glass Tokens */
+      --glass-bg: rgba(20, 20, 24, 0.58);
+      --glass-border: rgba(255, 255, 255, 0.16);
+      --glass-border-top: rgba(255, 255, 255, 0.28);
+      --glass-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+      --glass-blur: blur(20px);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      touch-action: manipulation;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      padding-top: 76px;
+      padding-bottom: 50px;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    /* FLOATING GLASS PILL HEADER */
+    .header-bar {
+      position: fixed;
+      top: 16px;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 16px;
+      pointer-events: none;
+      transform: translateZ(0);
+      will-change: transform;
+    }
+
+    .header-bar > * {
+      pointer-events: auto;
+    }
+
+    .header-left-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-capsule {
+      position: relative;
+      display: flex;
+      align-items: center;
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--glass-border);
+      border-top: 1px solid var(--glass-border-top);
+      border-radius: 9999px;
+      padding: 6px 18px;
+      height: 46px;
+      box-shadow: var(--glass-shadow);
+      cursor: pointer;
+      transform: translateZ(0);
+      max-width: 250px;
+    }
+
+    .top-light-pip {
+      position: absolute;
+      top: -3px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 44px;
+      height: 3.5px;
+      background: var(--color-accent);
+      border-radius: 9999px;
+      box-shadow: 0 0 10px var(--color-accent), 0 0 18px var(--color-accent);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .brand-title {
+      font-size: 14.5px;
+      font-weight: 800;
+      color: #ffffff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .action-btn {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--glass-border);
+      border-top: 1px solid var(--glass-border-top);
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: var(--glass-shadow);
+      transition: background 0.2s ease, border-color 0.2s ease;
+      flex-shrink: 0;
+      transform: translateZ(0);
+      text-decoration: none;
+    }
+
+    .action-btn:hover {
+      background: rgba(26, 26, 32, 0.75);
+      border-color: rgba(56, 189, 248, 0.45);
+      color: var(--color-accent);
+    }
+
+    .action-btn svg {
+      width: 19px;
+      height: 19px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* PLAYER AREA */
+    @keyframes skeletonPulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.7; }
+    }
+
+    .skeleton {
+      background: #182232;
+      animation: skeletonPulse 1.5s infinite ease-in-out;
+      border-radius: 8px;
+    }
+
+    .player-wrapper {
+      margin: 0 -16px 18px;
+      width: calc(100% + 32px);
+      background: #000;
+      aspect-ratio: 16/9;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid var(--border-color);
+      transform: translateZ(0);
+    }
+
+    .detail-player-box {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    .player-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* EPISODE LIST HEADER */
+    .ep-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      gap: 10px;
+    }
+
+    .ep-header-title {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: -0.2px;
+    }
+
+    .episode-sort-wrapper {
+      position: relative;
+      margin-left: auto;
+    }
+
+    .episode-sort-button {
+      height: 32px;
+      min-width: 92px;
+      padding: 0 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      color: var(--text-sub);
+      border: 1px solid var(--glass-border);
+      border-top: 1px solid var(--glass-border-top);
+      border-radius: 9999px;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: var(--glass-shadow);
+      transform: translateZ(0);
+    }
+
+    .episode-sort-button svg {
+      width: 13px;
+      height: 13px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.2;
+    }
+
+    .episode-sort-menu {
+      display: none;
+      position: absolute;
+      top: 38px;
+      right: 0;
+      min-width: 125px;
+      padding: 6px;
+      background: rgba(22, 22, 26, 0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-top: 1px solid var(--glass-border-top);
+      border-radius: 14px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.75);
+      z-index: 150;
+      transform: translateZ(0);
+    }
+
+    .episode-sort-menu.active {
+      display: block;
+    }
+
+    .episode-sort-option {
+      width: 100%;
+      padding: 8px 10px;
+      display: flex;
+      align-items: center;
+      background: transparent;
+      color: var(--text-muted);
+      border: none;
+      border-radius: 8px;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .episode-sort-option.active {
+      background: rgba(56, 189, 248, 0.16);
+      color: var(--color-accent);
+    }
+
+    .btn-see-all-ep {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      color: var(--color-accent);
+      border: 1px solid var(--glass-border);
+      border-top: 1px solid var(--glass-border-top);
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: var(--glass-shadow);
+      transform: translateZ(0);
+    }
+
+    .btn-see-all-ep svg {
+      width: 13px;
+      height: 13px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.2;
+    }
+
+    .ep-scroll-grid {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 14px;
+      margin-bottom: 16px;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      transform: translateZ(0);
+    }
+
+    .ep-scroll-grid::-webkit-scrollbar {
+      display: none;
+    }
+
+    .ep-box {
+      flex: 0 0 54px;
+      height: 54px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      color: var(--text-sub);
+      transition: all 0.2s ease;
+      transform: translateZ(0);
+    }
+
+    .ep-box.active {
+      background: var(--color-primary);
+      border-color: var(--color-accent);
+      color: #fff;
+      box-shadow: 0 0 16px rgba(2, 132, 199, 0.4);
+    }
+
+    /* ACTION BAR */
+    .action-bar {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      border-radius: 18px;
+      padding: 12px 6px;
+      margin-bottom: 24px;
+      position: relative;
+      transform: translateZ(0);
+    }
+
+    .action-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      color: var(--text-muted);
+      font-size: 11px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-family: inherit;
+      font-weight: 600;
+    }
+
+    .action-item svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2.2;
+    }
+
+    .action-item.active {
+      color: var(--color-accent);
+    }
+
+    .action-item.active svg {
+      fill: var(--color-accent);
+      stroke: var(--color-accent);
+    }
+
+    .server-custom-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .server-custom-btn svg {
+      width: 20px;
+      height: 20px;
+      stroke: var(--text-muted);
+      fill: none;
+      stroke-width: 2.2;
+    }
+
+    .server-select-hidden {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .server-tooltip-hint {
+      position: absolute;
+      top: -45px;
+      left: 10px;
+      background: var(--color-primary);
+      color: #ffffff;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      box-shadow: 0 4px 15px rgba(2, 132, 199, 0.5);
+      z-index: 50;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.4s ease;
+    }
+
+    .server-tooltip-hint.show {
+      opacity: 1;
+    }
+
+    /* COVER & INFO SAMPING */
+    .media-meta-card {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      margin-bottom: 24px;
+    }
+
+    .media-cover-wrapper {
+      width: 105px;
+      min-width: 105px;
+      aspect-ratio: 3/4;
+      border-radius: 14px;
+      overflow: hidden;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.8);
+      flex-shrink: 0;
+      transform: translateZ(0);
+    }
+
+    .media-cover-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .media-info-col {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .media-title {
+      font-size: 17px;
+      font-weight: 800;
+      line-height: 1.35;
+      color: #ffffff;
+    }
+
+    .genre-badges-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .genre-pill {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-muted);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .status-release-row {
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .status-release-row span strong {
+      color: #f1f5f9;
+      font-weight: 600;
+    }
+
+    .synopsis-block {
+      border-top: 1px solid var(--border-color);
+      padding-top: 16px;
+    }
+
+    .synopsis-heading {
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .synopsis-text {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text-sub);
+      margin-bottom: 24px;
+      text-align: justify;
+    }
+
+    /* BOTTOM SHEET */
+    .sheet-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 200;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      transform: translateZ(0);
+    }
+
+    .sheet-overlay.active {
+      display: block;
+    }
+
+    .bottom-sheet {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 65vh;
+      border-top-left-radius: 24px;
+      border-top-right-radius: 24px;
+      z-index: 201;
+      padding: 18px 16px;
+      display: flex;
+      flex-direction: column;
+      transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      background: rgba(18, 18, 22, 0.95);
+      border-top: 1px solid var(--glass-border-top);
+      box-shadow: 0 -10px 35px rgba(0, 0, 0, 0.8);
+    }
+
+    .sheet-overlay.active .bottom-sheet {
+      transform: translateY(0);
+    }
+
+    .sheet-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .sheet-title {
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .sheet-close {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .sheet-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(54px, 1fr));
+      gap: 10px;
+      overflow-y: auto;
+      padding-bottom: 24px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* COMMENTS SECTION */
+    .comments-section {
+      margin-top: 28px;
+      border-top: 1px solid var(--border-color);
+      padding-top: 22px;
+    }
+
+    .comments-header-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .comments-header-title {
+      font-size: 16px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #f8fafc;
+    }
+
+    .comments-header-title svg {
+      width: 18px;
+      height: 18px;
+      stroke: var(--color-accent);
+      fill: none;
+      stroke-width: 2.2;
+    }
+
+    .comment-input-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--glass-border);
+      border-top: 1px solid var(--glass-border-top);
+      border-radius: 9999px;
+      padding: 6px 8px 6px 18px;
+      margin-bottom: 20px;
+      box-shadow: var(--glass-shadow);
+    }
+
+    .comment-textarea {
+      flex: 1;
+      height: 38px;
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 13.5px;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .btn-send-comment {
+      background: var(--color-primary);
+      color: #fff;
+      border: none;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.4);
+    }
+
+    .btn-send-comment svg {
+      width: 15px;
+      height: 15px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2.2;
+    }
+
+    .comment-login-notice {
+      background: rgba(20, 20, 24, 0.6);
+      border: 1px dashed rgba(56, 189, 248, 0.35);
+      border-radius: 16px;
+      padding: 16px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    .comment-login-notice a {
+      color: var(--color-accent);
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .comments-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .comment-card {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 14px;
+      padding: 12px;
+    }
+
+    .tiktok-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--color-primary);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 800;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .comment-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .comment-user-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+
+    .tiktok-username {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .comment-body-text {
+      font-size: 13px;
+      color: #f1f5f9;
+      line-height: 1.45;
+      word-break: break-word;
+      margin-bottom: 6px;
+    }
+
+    .comment-time {
+      font-size: 11px;
+      color: #64748b;
+    }
+  </style>
+</head>
+<body>
+
+<!-- FLOATING GLASS HEADER DENGAN PIL KAPSUL -->
+<header class="header-bar">
+  <div class="header-left-group">
+    <button class="action-btn" onclick="goBack()" aria-label="Kembali">
+      <svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
+    </button>
+    <div class="pill-wrapper">
+      <div class="top-light-pip"></div>
+      <div class="nav-capsule">
+        <span class="brand-title" id="topHeaderTitle">Memuat...</span>
+      </div>
+    </div>
+  </div>
+
+  <button class="action-btn" onclick="goToHome()" aria-label="Beranda">
+    <svg viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+  </button>
+</header>
+
+<div class="container">
+  <div class="player-wrapper">
+    <div class="detail-player-box" id="playerMediaContainer">
+      <div class="skeleton" style="width:100%;height:100%;border-radius:0;"></div>
+    </div>
+  </div>
+
+  <div>
+    <!-- EPISODE LIST -->
+    <div id="epContainer">
+      <div class="ep-header-row">
+        <span class="ep-header-title">Episode List</span>
+
+        <div class="episode-sort-wrapper">
+          <button class="episode-sort-button" onclick="toggleEpisodeSort(event)">
+            <span id="episodeSortText">Terlama</span>
+            <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="episode-sort-menu" id="episodeSortMenu">
+            <button class="episode-sort-option active" id="episodeSortOldest" onclick="setEpisodeSort('oldest')">Terlama</button>
+            <button class="episode-sort-option" id="episodeSortNewest" onclick="setEpisodeSort('newest')">Terbaru</button>
+          </div>
+        </div>
+
+        <button class="btn-see-all-ep" onclick="openEpisodeSheet()">
+          <span id="epTotalInfo">0 Episode</span>
+          <svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
+      </div>
+
+      <div class="ep-scroll-grid" id="epGrid">
+        <div class="ep-box skeleton"></div>
+        <div class="ep-box skeleton"></div>
+        <div class="ep-box skeleton"></div>
+        <div class="ep-box skeleton"></div>
+      </div>
+    </div>
+
+    <!-- ACTION BAR -->
+    <div class="action-bar">
+      <div class="server-tooltip-hint" id="serverHint">Ganti server pemutaran di sini</div>
+
+      <div class="server-custom-btn">
+        <svg viewBox="0 0 24 24">
+          <rect x="2" y="2" width="20" height="8" rx="2"/>
+          <rect x="2" y="14" width="20" height="8" rx="2"/>
+          <line x1="6" y1="6" x2="6.01" y2="6"/>
+          <line x1="6" y1="18" x2="6.01" y2="18"/>
+        </svg>
+        <span style="font-size:11px;color:var(--text-muted);font-weight:600;">Server</span>
+        <select class="server-select-hidden" id="serverSelect" onchange="switchServer(this.value)"></select>
+      </div>
+
+      <div class="action-item">
+        <svg viewBox="0 0 24 24">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+          <circle cx="12" cy="12" r="3"/>
+        </svg>
+        <span id="viewCountText">0</span>
+      </div>
+
+      <button class="action-item" id="btnFavorite" onclick="toggleFavorite()">
+        <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        <span>Favorit</span>
+      </button>
+
+      <button class="action-item" onclick="triggerDownload()">
+        <svg viewBox="0 0 24 24">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        <span>Unduh</span>
+      </button>
+
+      <button class="action-item" onclick="triggerShare()">
+        <svg viewBox="0 0 24 24">
+          <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+          <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+        </svg>
+        <span>Bagikan</span>
+      </button>
+    </div>
+
+    <!-- DETAIL KONTEN -->
+    <div id="mediaDetailsGroup">
+      <div class="skeleton" style="height:120px;margin-bottom:20px;"></div>
+    </div>
+
+    <!-- COMMENTS SECTION -->
+    <section class="comments-section">
+      <div class="comments-header-wrapper">
+        <h3 class="comments-header-title">
+          <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Komentar <span id="commentsCountBadge">(0)</span>
+        </h3>
+      </div>
+
+      <div class="comment-input-box" id="commentFormBox" style="display:none;">
+        <input class="comment-textarea" id="commentInput" placeholder="Tambah komentar..." />
+        <button class="btn-send-comment" onclick="submitComment()">
+          <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+
+      <div class="comment-login-notice" id="commentLoginNotice">
+        Silakan <a onclick="goToHomeLogin()">Login</a> terlebih dahulu untuk menulis komentar.
+      </div>
+
+      <div class="comments-list" id="commentsListContainer">
+        <p style="font-size:12px;color:var(--text-muted);">Memuat komentar...</p>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- EPISODE BOTTOM SHEET -->
+<div class="sheet-overlay" id="sheetOverlay" onclick="closeEpisodeSheet()">
+  <div class="bottom-sheet" onclick="event.stopPropagation()">
+    <div class="sheet-header">
+      <span class="sheet-title">Semua Episode</span>
+      <button class="sheet-close" onclick="closeEpisodeSheet()">✕</button>
+    </div>
+    <div class="sheet-grid" id="sheetEpGrid"></div>
+  </div>
+</div>
+
+<script type="module">
+  try {
+    const { auth, db, ref, get, set, transaction, onAuthStateChanged } = await import('/assets/firebase-config.js');
+    window.auth = auth;
+    window.db = db;
+    window.fbRef = ref;
+    window.fbGet = get;
+    window.fbSet = set;
+    window.fbTransaction = transaction;
+
+    if (auth) {
+      onAuthStateChanged(auth, (user) => {
+        window.currentUser = user;
+        const form = document.getElementById('commentFormBox');
+        const notice = document.getElementById('commentLoginNotice');
+        if (form && notice) {
+          form.style.display = user ? 'flex' : 'none';
+          notice.style.display = user ? 'none' : 'block';
+        }
+      });
+    }
+  } catch (_) {}
+</script>
+
+<script>
+  let globalEpisodes = [];
+  let currentMainTitle = '';
+  let currentPoster = '';
+  let currentServerUrl = '';
+  let episodeSortMode = 'oldest';
+
+  function extractTargetSlug() {
+    const segments = window.location.pathname.replace(/^\/+|\/+$/g, '').split('/');
+    if (segments.length > 1 && segments[0] === 'donghua') return segments[1];
+    return new URLSearchParams(window.location.search).get('slug') || '';
+  }
+
+  const targetSlug = extractTargetSlug();
+
+  function sanitizeTitle(str) {
+    if (!str) return '';
+    const text = str.trim();
+    const half = Math.floor(text.length / 2);
+    return (text.length > 4 && text.slice(0, half) === text.slice(half)) ? text.slice(0, half).trim() : text;
+  }
+
+  function extractEpNumber(val, fallback = 1) {
+    const match = String(val || '').match(/(\d+(\.\d+)?)/);
+    return match ? parseFloat(match[1]) : fallback;
+  }
+
+  /* SIMPAN RIWAYAT TONTONAN UNTUK BERANDA (LANJUTKAN MENONTON) */
+  function saveContinueHistory(epNum) {
+    if (!targetSlug || !currentMainTitle) return;
+    try {
+      const historyKey = 'rz_continue_history';
+      let historyList = JSON.parse(localStorage.getItem(historyKey) || '[]');
+
+      // Hapus jika donghua yang sama sudah ada sebelumnya
+      historyList = historyList.filter(item => (item.slug !== targetSlug && item.mainPath !== targetSlug));
+
+      // Tambahkan ke paling depan
+      historyList.unshift({
+        slug: targetSlug,
+        mainPath: targetSlug,
+        title: currentMainTitle,
+        poster: currentPoster || 'https://via.placeholder.com/300x400?text=No+Cover',
+        cover: currentPoster || 'https://via.placeholder.com/300x400?text=No+Cover',
+        episode: `Ep ${epNum}`,
+        updatedAt: Date.now()
+      });
+
+      // Batasi maksimal 15 riwayat
+      if (historyList.length > 15) historyList = historyList.slice(0, 15);
+
+      localStorage.setItem(historyKey, JSON.stringify(historyList));
+    } catch (_) {}
+  }
+
+  function toggleEpisodeSort(e) {
+    e.stopPropagation();
+    document.getElementById('episodeSortMenu').classList.toggle('active');
+  }
+
+  function setEpisodeSort(mode) {
+    episodeSortMode = mode;
+    document.getElementById('episodeSortText').innerText = mode === 'oldest' ? 'Terlama' : 'Terbaru';
+    document.getElementById('episodeSortOldest').classList.toggle('active', mode === 'oldest');
+    document.getElementById('episodeSortNewest').classList.toggle('active', mode === 'newest');
+    document.getElementById('episodeSortMenu').classList.remove('active');
+    renderEpisodeGrid();
+  }
+
+  document.addEventListener('click', () => {
+    const menu = document.getElementById('episodeSortMenu');
+    if (menu) menu.classList.remove('active');
+  });
+
+  function getSortedEpisodes() {
+    return [...globalEpisodes].sort((a, b) => {
+      const numA = extractEpNumber(a.episode || a.number || a.title || a.slug, 0);
+      const numB = extractEpNumber(b.episode || b.number || b.title || b.slug, 0);
+      return episodeSortMode === 'oldest' ? numA - numB : numB - numA;
+    });
+  }
+
+  function renderEpisodeGrid() {
+    const epGrid = document.getElementById('epGrid');
+    if (!epGrid) return;
+    epGrid.innerHTML = '';
+
+    getSortedEpisodes().forEach((ep) => {
+      const epNum = ep.episode || ep.number || extractEpNumber(ep.title || ep.slug, 1);
+      const box = document.createElement('div');
+      box.className = 'ep-box';
+      box.innerText = epNum;
+      box.id = `ep-box-${epNum}`;
+      if (String(epNum) === String(window.currentPlayingEpisodeNum)) box.classList.add('active');
+
+      box.onclick = () => selectEpisodeByNum(epNum);
+      epGrid.appendChild(box);
+    });
+  }
+
+  function goBack() { 
+    if (window.history.length > 1) window.history.back();
+    else window.location.href = '/donghua/'; 
+  }
+  function goToHome() { window.location.href = '/'; }
+  function goToHomeLogin() { window.location.href = '/'; }
+
+  async function initViews() {
+    if (!targetSlug || !window.db) return;
+    try {
+      const totalRef = window.fbRef(window.db, `views_total/${targetSlug}`);
+      await window.fbTransaction(totalRef, c => (c || 0) + 1);
+      const snap = await window.fbGet(totalRef);
+      if (snap.exists()) document.getElementById('viewCountText').innerText = String(snap.val());
+    } catch (_) {}
+  }
+
+  function toggleFavorite() {
+    if (!targetSlug) return;
+    let favs = JSON.parse(localStorage.getItem('df_favorites') || '[]');
+    const exists = favs.some(f => f.slug === targetSlug);
+
+    if (exists) {
+      favs = favs.filter(f => f.slug !== targetSlug);
+      document.getElementById('btnFavorite').classList.remove('active');
+    } else {
+      favs.unshift({ slug: targetSlug, title: currentMainTitle, poster: currentPoster });
+      document.getElementById('btnFavorite').classList.add('active');
+    }
+    localStorage.setItem('df_favorites', JSON.stringify(favs));
+  }
+
+  function checkFavorite() {
+    const favs = JSON.parse(localStorage.getItem('df_favorites') || '[]');
+    if (favs.some(f => f.slug === targetSlug)) {
+      document.getElementById('btnFavorite').classList.add('active');
+    }
+  }
+
+  function triggerDownload() {
+    if (currentServerUrl) window.open(currentServerUrl, '_blank');
+    else alert('Video belum siap.');
+  }
+
+  function triggerShare() {
+    if (navigator.share) {
+      navigator.share({ title: currentMainTitle, url: window.location.href }).catch(() => {});
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+      alert('Tautan disalin!');
+    }
+  }
+
+  async function loadComments() {
+    const container = document.getElementById('commentsListContainer');
+    if (!window.db || !targetSlug) {
+      container.innerHTML = '<p style="font-size:12px;color:var(--text-muted);">Belum ada komentar.</p>';
+      return;
+    }
+
+    try {
+      const snap = await window.fbGet(window.fbRef(window.db, `comments/${targetSlug}`));
+      if (snap.exists()) {
+        const data = snap.val();
+        const list = Object.values(data).reverse();
+        document.getElementById('commentsCountBadge').innerText = `(${list.length})`;
+
+        container.innerHTML = list.map(item => `
+          <div class="comment-card">
+            <div class="tiktok-avatar">${(item.email || 'U')[0].toUpperCase()}</div>
+            <div class="comment-content">
+              <div class="comment-user-row">
+                <span class="tiktok-username">${item.email ? item.email.split('@')[0] : 'User'}</span>
+              </div>
+              <div class="comment-body-text">${item.text}</div>
+              <span class="comment-time">${new Date(item.timestamp).toLocaleDateString('id-ID')}</span>
+            </div>
+          </div>
+        `).join('');
+      } else {
+        container.innerHTML = '<p style="font-size:12px;color:var(--text-muted);">Belum ada komentar.</p>';
+      }
+    } catch (_) {
+      container.innerHTML = '<p style="font-size:12px;color:var(--text-muted);">Gagal memuat komentar.</p>';
+    }
+  }
+
+  async function submitComment() {
+    const input = document.getElementById('commentInput');
+    const text = input.value.trim();
+    if (!text || !window.currentUser || !window.db) return;
+
+    try {
+      await window.fbSet(window.fbRef(window.db, `comments/${targetSlug}/${Date.now()}`), {
+        uid: window.currentUser.uid,
+        email: window.currentUser.email || '',
+        text,
+        timestamp: Date.now()
+      });
+      input.value = '';
+      loadComments();
+    } catch (e) {
+      alert('Gagal mengirim komentar.');
+    }
+  }
+
+  async function loadDetail() {
+    if (!targetSlug) return;
+
+    try {
+      const catRes = await fetch('/api/donghua?path=donghua.json');
+      if (catRes.ok) {
+        const catalog = await catRes.json();
+        const info = catalog.find(d => d.slug === targetSlug);
+
+        if (info) {
+          currentMainTitle = sanitizeTitle(info.title);
+          currentPoster = info.cover || info.poster || info.thumbnail || '';
+
+          document.getElementById('topHeaderTitle').innerText = currentMainTitle;
+          document.getElementById('pageTitle').innerText = `${currentMainTitle} - Dongflix`;
+
+          const genresHtml = (Array.isArray(info.genres) ? info.genres : [])
+            .map(g => `<span class="genre-pill">${g}</span>`).join('');
+
+          document.getElementById('mediaDetailsGroup').innerHTML = `
+            <div class="media-meta-card">
+              <div class="media-cover-wrapper">
+                <img src="${currentPoster || 'https://via.placeholder.com/150x200?text=No+Cover'}" class="media-cover-img" />
+              </div>
+              <div class="media-info-col">
+                <h1 class="media-title">${currentMainTitle}</h1>
+                <div class="genre-badges-row">${genresHtml}</div>
+                <div class="status-release-row">
+                  <span>Status: <strong>${info.status || 'Ongoing'}</strong></span>
+                  <span>Rilis: <strong>${info.released || '-'}</strong></span>
+                </div>
+              </div>
+            </div>
+            <div class="synopsis-block">
+              <div class="synopsis-heading">SINOPSIS</div>
+              <p class="synopsis-text">${info.synopsis || info.description || info.desc || 'Tidak ada deskripsi sinopsis.'}</p>
+            </div>
+          `;
+        }
+      }
+
+      const epRes = await fetch(`/api/donghua?path=episodes/${encodeURIComponent(targetSlug)}.json`);
+      if (epRes.ok) {
+        globalEpisodes = await epRes.json();
+        document.getElementById('epTotalInfo').innerText = `${globalEpisodes.length} Episode`;
+
+        if (globalEpisodes.length > 0) {
+          renderEpisodeGrid();
+          
+          // Cek episode terakhir yang tersimpan di localStorage jika ada
+          const historyList = JSON.parse(localStorage.getItem('rz_continue_history') || '[]');
+          const savedItem = historyList.find(item => item.slug === targetSlug || item.mainPath === targetSlug);
+          
+          let initialEp = globalEpisodes[0].episode || globalEpisodes[0].number || extractEpNumber(globalEpisodes[0].title || globalEpisodes[0].slug, 1);
+          if (savedItem && savedItem.episode) {
+            const savedEpNum = extractEpNumber(savedItem.episode);
+            const exists = globalEpisodes.some(e => String(e.episode || e.number || extractEpNumber(e.title || e.slug, 0)) === String(savedEpNum));
+            if (exists) initialEp = savedEpNum;
+          }
+
+          selectEpisodeByNum(initialEp);
+        } else {
+          document.getElementById('playerMediaContainer').innerText = 'Episode belum tersedia.';
+        }
+      }
+    } catch (_) {}
+
+    const hint = document.getElementById('serverHint');
+    if (hint) {
+      hint.classList.add('show');
+      setTimeout(() => hint.classList.remove('show'), 4000);
+    }
+
+    checkFavorite();
+    initViews();
+    loadComments();
+  }
+
+  function selectEpisodeByNum(epNum) {
+    closeEpisodeSheet();
+    
+    const episode = globalEpisodes.find(e => {
+      const num = e.episode || e.number || extractEpNumber(e.title || e.slug, 0);
+      return String(num) === String(epNum);
+    }) || globalEpisodes[0];
+
+    if (!episode) return;
+
+    const finalEpNum = episode.episode || episode.number || extractEpNumber(episode.title || episode.slug, 1);
+    window.currentPlayingEpisodeNum = finalEpNum;
+
+    // Simpan ke riwayat tontonan untuk Beranda
+    saveContinueHistory(finalEpNum);
+
+    document.querySelectorAll('.ep-box').forEach(b => b.classList.remove('active'));
+    const activeBox = document.getElementById(`ep-box-${finalEpNum}`);
+    if (activeBox) {
+      activeBox.classList.add('active');
+      activeBox.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    }
+
+    const rawServers = episode.servers || episode.server || [];
+    const servers = (Array.isArray(rawServers) ? rawServers : Object.values(rawServers))
+      .map((s, i) => ({
+        name: s.name || s.title || `Server ${i + 1}`,
+        url: s.link || s.url || (typeof s === 'string' ? s : '')
+      }))
+      .filter(s => /^https?:\/\//i.test(s.url));
+
+    const serverSelect = document.getElementById('serverSelect');
+    serverSelect.innerHTML = '';
+
+    if (servers.length > 0) {
+      servers.forEach((srv, i) => {
+        const opt = document.createElement('option');
+        opt.value = srv.url;
+        opt.innerText = srv.name;
+        if (i === 0) opt.selected = true;
+        serverSelect.appendChild(opt);
+      });
+      currentServerUrl = servers[0].url;
+      renderPlayer(servers[0].url);
+    } else {
+      document.getElementById('playerMediaContainer').innerHTML = '<div class="detail-player-box">Server video belum tersedia.</div>';
+    }
+  }
+
+  function switchServer(url) {
+    if (url) {
+      currentServerUrl = url;
+      renderPlayer(url);
+    }
+  }
+
+  function renderPlayer(url) {
+    const box = document.getElementById('playerMediaContainer');
+    box.innerHTML = `<iframe class="player-iframe" src="${url}" allowfullscreen allow="autoplay; encrypted-media; fullscreen" referrerpolicy="no-referrer"></iframe>`;
+  }
+
+  function openEpisodeSheet() {
+    const grid = document.getElementById('sheetEpGrid');
+    if (!grid) return;
+    grid.innerHTML = '';
+
+    getSortedEpisodes().forEach((ep) => {
+      const epNum = ep.episode || ep.number || extractEpNumber(ep.title || ep.slug, 1);
+      const box = document.createElement('div');
+      box.className = `ep-box ${String(epNum) === String(window.currentPlayingEpisodeNum) ? 'active' : ''}`;
+      box.innerText = epNum;
+      box.onclick = () => selectEpisodeByNum(epNum);
+      grid.appendChild(box);
+    });
+
+    document.getElementById('sheetOverlay').classList.add('active');
+  }
+
+  function closeEpisodeSheet() {
+    document.getElementById('sheetOverlay').classList.remove('active');
+  }
+
+  window.onload = loadDetail;
+</script>
+</body>
+</html>
