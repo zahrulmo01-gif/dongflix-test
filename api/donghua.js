@@ -1,5 +1,3 @@
-import config from './config.json';
-
 export default async function handler(req, res) {
   const { path } = req.query;
 
@@ -7,9 +5,13 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Parameter path diperlukan' });
   }
 
-  // Gabungkan token dari file config.json
-  const repo = config.repo;
-  const token = `${config.tokenPart1}${config.tokenPart2}`;
+  // Mengambil langsung dari environment variable yang diset di Netlify
+  const repo = process.env.GITHUB_REPO || 'zahrulmo01-gif/dongflix2.0';
+  const token = process.env.GITHUB_TOKEN;
+
+  if (!token) {
+    return res.status(500).json({ error: 'GITHUB_TOKEN belum diatur di Netlify' });
+  }
 
   const targetFile = `donghua/${path}`;
   const ghUrl = `https://api.github.com/repos/${repo}/contents/${targetFile}?ref=main&t=${Date.now()}`;
