@@ -40,7 +40,7 @@
       color: var(--text-main); 
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
       padding-top: 0;
-      padding-bottom: 50px;
+      padding-bottom: 50px; 
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
     }
@@ -484,7 +484,7 @@
       letter-spacing: 0.5px; border: 1px dashed var(--border-color); z-index: 1;
     }
 
-    /* SLIDER DENGAN GRADIASI HANYA SAMPAI ATAS JUDUL */
+    /* SLIDER DENGAN PROGRESSIVE BLUR & MENGGELAP PENUH KE BAWAH */
     .hero-slider-wrapper { 
       position: relative; 
       width: 100%; 
@@ -518,30 +518,42 @@
       transform: translateZ(0);
     }
 
-    /* GRADIASI HANYA DARI BAWAH SAMPAI AREA ATAS JUDUL SAJA (TIDAK FULL) */
-    .hero-overlay { 
-      position: absolute; 
+    /* GRADASI BLUR MEMUDAR TANPA GARIS PATAH */
+    .hero-blur-layer {
+      position: absolute;
       bottom: 0;
       left: 0;
       right: 0;
-      height: 52%; 
+      height: 60%;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      mask-image: linear-gradient(to top, black 20%, rgba(0, 0, 0, 0.4) 60%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to top, black 20%, rgba(0, 0, 0, 0.4) 60%, transparent 100%);
+      z-index: 1;
+      pointer-events: none;
+      transform: translateZ(0);
+    }
+
+    /* GRADASI GELAP MENYATU DENGAN LATAR BELAKANG HITAM PEKAT */
+    .hero-overlay { 
+      position: absolute; 
+      inset: 0; 
       background: linear-gradient(
         to top, 
-        rgba(0, 0, 0, 0.96) 0%, 
-        rgba(0, 0, 0, 0.72) 45%, 
-        rgba(0, 0, 0, 0.28) 78%, 
-        transparent 100%
+        #000000 0%, 
+        rgba(0, 0, 0, 0.96) 24%, 
+        rgba(0, 0, 0, 0.7) 48%, 
+        rgba(0, 0, 0, 0.25) 70%, 
+        transparent 90%
       ); 
-      backdrop-filter: blur(2.5px);
-      -webkit-backdrop-filter: blur(2.5px);
-      z-index: 1; 
+      z-index: 2; 
       transform: translateZ(0);
       pointer-events: none;
     }
 
     .hero-content { 
       position: relative; 
-      z-index: 2; 
+      z-index: 3; 
       padding: 20px 18px 42px; 
       max-width: 760px; 
       margin: 0 auto;
@@ -620,7 +632,7 @@
       z-index: 2; pointer-events: none; gap: 4px;
     }
 
-    /* BADGE EPISODE BAWAH GLASS EFECT SEPERTI HEADER */
+    /* BADGE EPISODE BAWAH GLASS EFFECT SEPERTI HEADER */
     .badge-bottom { 
       background: var(--glass-bg);
       backdrop-filter: var(--glass-blur);
@@ -808,8 +820,8 @@
       display: inline-flex;
       align-items: center;
       background: var(--glass-bg);
-      backdrop-filter: var(--glass-blur);
-      -webkit-backdrop-filter: var(--glass-blur);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       border: 1px solid var(--glass-border);
       border-top: 1px solid var(--glass-border-top);
       color: #ffffff;
@@ -990,7 +1002,7 @@
     </div>
   </div>
 
-  <!-- HERO SLIDER PENUH -->
+  <!-- HERO SLIDER PENUH DENGAN DOUBLE OVERLAY -->
   <div class="hero-slider-wrapper" id="heroSlider">
     <div class="skeleton skeleton-hero">
       <div style="width: 100%;">
@@ -1066,7 +1078,7 @@
       </div>
     </section>
 
-    <!-- 5. DONGHUA POPULER -->
+    <!-- 5. DONGHUA POPULER (SUSUNAN KE BAWAH, MAKSIMAL 6) -->
     <section class="section-block">
       <div class="section-header-flex">
         <h2 class="section-title">
@@ -1281,6 +1293,7 @@
 
         slide.innerHTML = `
           <img class="hero-bg-img" src="${posterUrl}" alt="${titleText}" loading="lazy" referrerpolicy="no-referrer" onerror="handleMissingImage(this)" />
+          <div class="hero-blur-layer"></div>
           <div class="hero-overlay"></div>
           <div class="hero-content">
             <span class="badge-tag ${isMovie ? 'movie' : ''}">${isMovie ? 'MOVIE' : 'DONGHUA'}</span>
