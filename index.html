@@ -739,18 +739,6 @@
       display: block;
     }
 
-    .featured-dots-menu {
-      position: absolute;
-      top: 8px;
-      right: 10px;
-      color: rgba(255, 255, 255, 0.8);
-      font-size: 14px;
-      font-weight: 900;
-      letter-spacing: 1.5px;
-      pointer-events: none;
-      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
-    }
-
     .featured-info-col {
       flex: 1;
       min-width: 0;
@@ -819,17 +807,14 @@
       margin-top: 6px;
       display: inline-flex;
       align-items: center;
-      background: var(--glass-bg);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border: 1px solid var(--glass-border);
-      border-top: 1px solid var(--glass-border-top);
-      color: #ffffff;
+      background: #1c1c1e;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #d1d5db;
       font-size: 11px;
       font-weight: 700;
       padding: 6px 14px;
       border-radius: 9999px;
-      box-shadow: var(--glass-shadow);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
       flex-shrink: 0;
       transform: translateZ(0);
     }
@@ -1375,7 +1360,6 @@
       card.innerHTML = `
         <div class="featured-thumb-box">
           <img src="${posterUrl}" alt="${titleText}" loading="lazy" referrerpolicy="no-referrer" onerror="handleMissingImage(this)" />
-          <div class="featured-dots-menu">•••</div>
         </div>
         <div class="featured-info-col">
           <div class="featured-text-top">
