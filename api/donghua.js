@@ -1,16 +1,24 @@
-export default async function handler(req, res) {
-  const { path } = req.query;
+exports.handler = async function (event, context) {
+  // Ambil query parameter (?path=...)
+  const path = event.queryStringParameters?.path;
 
   if (!path) {
-    return res.status(400).json({ error: 'Parameter path diperlukan' });
+    return {
+      statusCode: 400,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ error: 'Parameter path diperlukan' })
+    };
   }
 
-  // Mengambil langsung dari environment variable yang diset di Netlify
-  const repo = 'zahrulmo01-gif/dongflix2.0';
+  const repo = process.env.GITHUB_REPO || 'zahrulmo01-gif/dongflix2.0';
   const token = process.env.GITHUB_TOKEN;
 
   if (!token) {
-    return res.status(500).json({ error: 'GITHUB_TOKEN belum diatur di Netlify' });
+    return {
+      statusCode: 500,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ error: 'GITHUB_TOKEN belum diatur di Netlify' })
+    };
   }
 
   const targetFile = `donghua/${path}`;
@@ -26,14 +34,29 @@ export default async function handler(req, res) {
     });
 
     if (!response.ok) {
-      return res.status(response.status).json({ error: 'File tidak ditemukan di GitHub' });
+      return {
+        statusCode: response.status,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ error: 'File tidak ditemukan di GitHub' })
+      };
     }
 
     const data = await response.json();
 
-    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
-    return res.status(200).json(data);
+    return {
+      statusCode: 200,
+      headers: {
+        'Content-Type': 'application/json',
+        'Cache-Control': 'no-store, no-cache, must-revalidate',
+        'Access-Control-Allow-Origin': '*'
+      },
+      body: JSON.stringify(data)
+    };
   } catch (err) {
-    return res.status(500).json({ error: err.message });
+    return {
+      statusCode: 500,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ error: err.message })
+    };
   }
-}
+};
