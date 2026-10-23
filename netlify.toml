@@ -1,7 +1,25 @@
 [build]
   functions = "api"
 
+# Redirect untuk API Functions
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/:splat"
+  status = 200
+
+# Rewrite: /donghua dan /donghua/ -> /donghua/index.html
+[[redirects]]
+  from = "/donghua"
+  to = "/donghua/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/donghua/"
+  to = "/donghua/index.html"
+  status = 200
+
+# Rewrite: /donghua/:slug -> /donghua/watch.html
+[[redirects]]
+  from = "/donghua/:slug"
+  to = "/donghua/watch.html"
   status = 200
