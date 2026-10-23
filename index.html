@@ -578,38 +578,107 @@
     .section-header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
     .section-title { font-size: 18px; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
 
-    /* HORIZONTAL SCROLL */
-    .scroll-row { 
-      display: flex; 
-      gap: 12px; 
-      overflow-x: auto; 
-      padding-bottom: 10px; 
-      scrollbar-width: none; 
-      flex-wrap: nowrap;
+    /* ========================================================
+       LANJUTKAN MENONTON (SESUAI GAMBAR REFERENSI)
+       ======================================================== */
+    .continue-scroll-row {
+      display: flex;
+      gap: 14px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      scrollbar-width: none;
       -webkit-overflow-scrolling: touch;
       transform: translateZ(0);
     }
-    .scroll-row::-webkit-scrollbar { display: none; }
+    .continue-scroll-row::-webkit-scrollbar { display: none; }
 
-    .card-scroll-item { 
-      flex: 0 0 calc((100% - 24px) / 3); 
-      min-width: calc((100% - 24px) / 3); 
-      cursor: pointer; 
-      text-decoration: none !important; 
-      display: block; 
+    .continue-card-item {
+      flex: 0 0 200px;
+      min-width: 200px;
+      max-width: 200px;
+      text-decoration: none !important;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      cursor: pointer;
       transform: translateZ(0);
     }
 
-    .card-continue-img-wrapper, .card-grid-img-wrapper { 
-      position: relative; width: 100%; height: 180px; 
-      border-radius: 14px; overflow: hidden; background: var(--bg-card); 
+    .continue-thumb-box {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9.5;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #111;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.6);
+      transform: translateZ(0);
+    }
+
+    .continue-thumb-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .continue-thumb-box .continue-eps-text {
+      position: absolute;
+      left: 10px;
+      bottom: 8px;
+      font-size: 13px;
+      font-weight: 800;
+      color: #ffffff;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9), 0 0 4px rgba(0, 0, 0, 0.8);
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .continue-item-title {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.3;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-top: 2px;
+    }
+
+    .continue-time-row {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #94a3b8;
+    }
+
+    .continue-time-row svg {
+      width: 13px;
+      height: 13px;
+      stroke: var(--color-accent);
+      fill: none;
+      stroke-width: 2.2;
+      flex-shrink: 0;
+    }
+
+    /* CARD GRID UMUM */
+    .card-grid-img-wrapper { 
+      position: relative; 
+      width: 100%; 
+      height: 180px; 
+      border-radius: 14px; 
+      overflow: hidden; 
+      background: var(--bg-card); 
       border: 1px solid var(--border-color); 
       box-shadow: 0 4px 15px rgba(0,0,0,0.6); 
       transform: translateZ(0);
       backface-visibility: hidden;
       -webkit-backface-visibility: hidden;
     }
-    .card-continue-img-wrapper img, .card-grid-img-wrapper img { width: 100%; height: 100%; object-fit: cover; }
+    .card-grid-img-wrapper img { width: 100%; height: 100%; object-fit: cover; }
     
     /* BADGE ATAS (ONGOING/STATUS) BERSIH TANPA EFEK GLASS */
     .badge-ep { 
@@ -887,15 +956,19 @@
         column-gap: 16px; 
         row-gap: 28px;
       }
-      .card-scroll-item { 
-        flex: 0 0 calc((100% - 75px) / 6); 
-        min-width: calc((100% - 75px) / 6); 
+      .continue-card-item {
+        flex: 0 0 240px;
+        min-width: 240px;
+        max-width: 240px;
+      }
+      .continue-item-title {
+        font-size: 14.5px;
       }
       .popular-featured-row .popular-featured-card {
         flex: 0 0 calc((100% - 32px) / 3);
         max-width: 380px;
       }
-      .card-continue-img-wrapper, .card-grid-img-wrapper { 
+      .card-grid-img-wrapper { 
         height: 235px; 
       }
       .card-title { font-size: 14.5px; margin-top: 10px; }
@@ -1005,7 +1078,7 @@
         <svg class="icon-svg" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
         Lanjutkan Menonton
       </h2>
-      <div class="scroll-row" id="continueRow"></div>
+      <div class="continue-scroll-row" id="continueRow"></div>
     </section>
 
     <!-- 2. POPULER HARI INI (HORIZONTAL SCROLL) -->
@@ -1336,7 +1409,7 @@
       }, 4000);
     }
 
-    /* KARTU POPULER */
+    /* KARTU POPULER (TITIK MENU DIHAPUS) */
     function createPopularFeaturedCard(item) {
       const card = document.createElement('a');
       card.className = 'popular-featured-card';
@@ -1423,31 +1496,6 @@
       return card;
     }
 
-    function createScrollCard(item) {
-      const card = document.createElement('a');
-      card.className = 'card-scroll-item';
-      card.href = `/donghua/${encodeURIComponent(item.slug || item.mainPath)}`;
-
-      const isMovie = isMovieItem(item);
-      const episodeText = parseEpisodeText(item);
-      const statusText = parseStatusText(item);
-      const titleText = sanitizeTitle(item.title);
-      const posterUrl = getImageUrl(item);
-
-      card.innerHTML = `
-        <div class="card-continue-img-wrapper">
-          <img src="${posterUrl}" alt="${item.title}" loading="lazy" referrerpolicy="no-referrer" onerror="handleMissingImage(this)" />
-          <span class="badge-ep">${episodeText}</span>
-          <div class="card-bottom-info">
-            <span class="badge-bottom">${isMovie ? statusText : episodeText}</span>
-          </div>
-        </div>
-        <div class="card-title">${item.title}</div>
-      `;
-
-      return card;
-    }
-
     function renderGridItems(list, targetElement) {
       if (!targetElement) return;
       targetElement.innerHTML = '';
@@ -1457,18 +1505,6 @@
         });
       } else {
         targetElement.innerHTML = '<p style="color: var(--text-muted); font-size: 12px; grid-column: 1 / -1;">Data tidak tersedia.</p>';
-      }
-    }
-
-    function renderScrollItems(list, targetElement) {
-      if (!targetElement) return;
-      targetElement.innerHTML = '';
-      if (Array.isArray(list) && list.length > 0) {
-        list.forEach(item => {
-          if (item && item.title) targetElement.appendChild(createScrollCard(item));
-        });
-      } else {
-        targetElement.innerHTML = '<p style="color: var(--text-muted); font-size: 12px;">Data tidak tersedia.</p>';
       }
     }
 
@@ -1483,6 +1519,53 @@
       } else {
         targetElement.innerHTML = '<p style="color: var(--text-muted); font-size: 12px;">Data tidak tersedia.</p>';
       }
+    }
+
+    /* RENDER LANJUTKAN MENONTON SEPERTI GAMBAR */
+    function renderContinueWatching() {
+      const container = document.getElementById('continueSection');
+      const row = document.getElementById('continueRow');
+      if (!container || !row) return;
+
+      const historyList = JSON.parse(localStorage.getItem('rz_continue_history') || '[]');
+      if (!historyList || historyList.length === 0) { 
+        container.style.display = 'none'; 
+        return; 
+      }
+
+      container.style.display = 'block';
+      row.innerHTML = '';
+
+      const limitedHistory = historyList.slice(0, 10);
+
+      limitedHistory.forEach((item) => {
+        const card = document.createElement('a');
+        card.className = 'continue-card-item';
+        card.href = `/donghua/${encodeURIComponent(item.slug || item.mainPath)}`;
+        
+        const posterUrl = item.poster || item.cover || 'https://via.placeholder.com/300x200?text=No+Cover';
+        const rawEp = String(item.episode || 'Ep 1').replace(/[^0-9]/g, '');
+        const displayEps = `Eps ${rawEp || '1'}`[span_0](start_span)[span_0](end_span);
+        
+        const progressTime = item.progressTime || '00:04';
+        const durationTime = item.durationTime || '24:02';
+
+        card.innerHTML = `
+          <div class="continue-thumb-box">
+            <img src="${posterUrl}" alt="${item.title}" loading="lazy" referrerpolicy="no-referrer" onerror="handleMissingImage(this)" />
+            <span class="continue-eps-text">${displayEps}</span>
+          </div>
+          <div class="continue-item-title" title="${item.title}">${item.title}</div>
+          <div class="continue-time-row">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            <span>${progressTime} / ${durationTime}</span>
+          </div>
+        `;
+        row.appendChild(card);
+      });
     }
 
     async function loadMainData() {
@@ -1510,41 +1593,6 @@
       } catch (e) {
         if (latestGrid) latestGrid.innerHTML = `<p style="color: #ef4444; font-size: 12px; grid-column: 1 / -1;">Gagal memuat katalog donghua.</p>`;
       }
-    }
-
-    function renderContinueWatching() {
-      const container = document.getElementById('continueSection');
-      const row = document.getElementById('continueRow');
-      if (!container || !row) return;
-
-      const historyList = JSON.parse(localStorage.getItem('rz_continue_history') || '[]');
-      if (!historyList || historyList.length === 0) { 
-        container.style.display = 'none'; 
-        return; 
-      }
-
-      container.style.display = 'block';
-      row.innerHTML = '';
-
-      const limitedHistory = historyList.slice(0, 6);
-
-      limitedHistory.forEach((item) => {
-        const card = document.createElement('a');
-        card.className = 'card-scroll-item';
-        card.href = `/donghua/${encodeURIComponent(item.slug || item.mainPath)}`;
-        
-        const posterUrl = item.poster || item.cover || 'https://via.placeholder.com/300x400?text=No+Cover';
-        const displayEp = item.episode || 'Ep 1';
-
-        card.innerHTML = `
-          <div class="card-continue-img-wrapper">
-            <img src="${posterUrl}" alt="${item.title}" loading="lazy" referrerpolicy="no-referrer" onerror="handleMissingImage(this)" />
-            <span class="badge-ep">${displayEp}</span>
-          </div>
-          <div class="card-title">${item.title}</div>
-        `;
-        row.appendChild(card);
-      });
     }
 
     let resizeTimer = null;
