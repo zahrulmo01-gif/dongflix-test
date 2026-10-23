@@ -526,7 +526,7 @@
     .see-all-btn.movie { color: var(--color-movie); }
 
     /* ========================================================
-       SHARED COMPONENT: FEATURED CARD STYLING (CAROUSEL & VERTICAL)
+       FEATURED CARD: SINOPSIS 3 BARIS & KATEGORI TANPA BATAS
        ======================================================== */
     .popular-featured-row {
       display: flex;
@@ -605,6 +605,7 @@
       height: 100%;
       display: flex;
       flex-direction: column;
+      justify-content: space-between;
       overflow: hidden;
       padding: 2px 0;
     }
@@ -613,7 +614,6 @@
       display: flex;
       flex-direction: column;
       gap: 4px;
-      flex: 1;
       min-height: 0;
       overflow: hidden;
     }
@@ -630,26 +630,26 @@
       flex-shrink: 0;
     }
 
-    /* Sinopsis otomatis mengisi sisa ruang tanpa batas baris kaku */
+    /* Sinopsis tepat 3 baris */
     .featured-synopsis {
       font-size: 11px;
       color: #94a3b8;
       line-height: 1.4;
-      flex: 1;
-      min-height: 0;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
       overflow: hidden;
-      text-overflow: ellipsis;
     }
 
+    /* Kategori tanpa batas potongan teks */
     .featured-genres {
       font-size: 11px;
       color: #64748b;
       line-height: 1.35;
       font-weight: 500;
-      display: -webkit-box;
-      -webkit-line-clamp: 1;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
+      white-space: normal;
+      overflow: visible;
+      text-overflow: clip;
       margin-top: 2px;
       flex-shrink: 0;
     }
@@ -916,7 +916,7 @@
       </div>
     </section>
 
-    <!-- 5. DONGHUA POPULER (TAMPILAN SAMA DENGAN POPULER HARI INI, SUSUNAN LIST KE BAWAH, MAKSIMAL 6) -->
+    <!-- 5. DONGHUA POPULER (TAMPILAN SAMA DENGAN POPULER HARI INI, LIST KE BAWAH, MAKSIMAL 6) -->
     <section class="section-block">
       <div class="section-header-flex">
         <h2 class="section-title">
@@ -1181,11 +1181,12 @@
       const epNum = item['latest-episode'] || (item.episode ? item.episode.replace(/[^0-9]/g, '') : '1');
       const badgeText = isMovie ? 'Movie' : `Ep ${epNum} / ${statusText === 'COMPLETED' ? 'Completed' : 'Ongoing'}`;
 
-      const synopsisText = item.synopsis || item.description || item.desc || `${titleText} – Dunia tanpa sihir, tanpa pertempuran Dou Qi, namun memiliki Martial Soul yang megah. Ikuti petualangan legendaris Tang Sect di benua Douluo yang penuh rintangan mistis dan pertempuran epik melawan takdir.`;
+      const synopsisText = item.synopsis || item.description || item.desc || `${titleText} – Dunia tanpa sihir, tanpa pertempuran Dou Qi, namun memiliki Martial Soul yang megah. Ikuti petualangan legendaris Tang Sect di benua Douluo yang penuh rintangan mistis dan pertempuran epik melawan takdir[span_0](start_span)[span_0](end_span).`;
 
+      // Kategori tanpa batas pemotongan array (ditampilkan seluruhnya)
       let genresFormatted = 'Action • Adventure • Fantasy • Romance';
       if (Array.isArray(item.genres) && item.genres.length > 0) {
-        genresFormatted = item.genres.slice(0, 4).join(' • ');
+        genresFormatted = item.genres.join(' • ');
       }
 
       card.innerHTML = `
