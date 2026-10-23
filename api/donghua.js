@@ -6,7 +6,7 @@ export default async function handler(req, res) {
   }
 
   // Mengambil langsung dari environment variable yang diset di Netlify
-  const repo = process.env.GITHUB_REPO || 'zahrulmo01-gif/dongflix2.0';
+  const repo = 'zahrulmo01-gif/dongflix2.0';
   const token = process.env.GITHUB_TOKEN;
 
   if (!token) {
