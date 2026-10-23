@@ -11,7 +11,7 @@
       --bg-main: #000000;
       --bg-card: #0a0a0a;
       --bg-skeleton: #121212;
-      --bg-search-input: #121212;
+      --bg-search-input: rgba(255, 255, 255, 0.1);
       --color-primary: #0284c7;
       --color-primary-hover: #0369a1;
       --color-accent: #38bdf8;
@@ -68,11 +68,11 @@
       top: -3px;
       left: 50%;
       transform: translateX(-50%);
-      width: 42px;
+      width: 44px;
       height: 3.5px;
       background: var(--color-accent);
       border-radius: 9999px;
-      box-shadow: 0 0 12px var(--color-accent), 0 0 20px var(--color-accent);
+      box-shadow: 0 0 12px var(--color-accent), 0 0 22px var(--color-accent);
       opacity: 0.95;
       pointer-events: none;
     }
@@ -81,21 +81,23 @@
       position: relative;
       display: flex;
       align-items: center;
-      background: rgba(15, 15, 18, 0.82);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(255, 255, 255, 0.14);
+      backdrop-filter: blur(32px) saturate(190%);
+      -webkit-backdrop-filter: blur(32px) saturate(190%);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      border-top: 1px solid rgba(255, 255, 255, 0.45);
       border-radius: 9999px;
       padding: 6px 18px;
       height: 46px;
-      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.3);
       transition: all 0.25s ease;
       cursor: pointer;
     }
 
     .nav-capsule:hover {
-      border-color: rgba(56, 189, 248, 0.45);
-      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.85), 0 0 20px rgba(56, 189, 248, 0.2);
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(56, 189, 248, 0.5);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45), 0 0 20px rgba(56, 189, 248, 0.3);
     }
 
     .brand-title-capsule { 
@@ -111,15 +113,15 @@
 
     .brand-title-capsule .brand-accent { 
       color: var(--color-accent); 
-      text-shadow: 0 0 14px rgba(56, 189, 248, 0.5); 
+      text-shadow: 0 0 14px rgba(56, 189, 248, 0.6); 
     }
 
     .tld-badge {
       display: inline-flex;
       align-items: center;
-      background: rgba(56, 189, 248, 0.16);
-      color: var(--color-accent);
-      border: 1px solid rgba(56, 189, 248, 0.35);
+      background: rgba(56, 189, 248, 0.25);
+      color: #e0f2fe;
+      border: 1px solid rgba(56, 189, 248, 0.45);
       font-size: 11px;
       font-weight: 800;
       letter-spacing: 0.4px;
@@ -139,23 +141,24 @@
       width: 46px;
       height: 46px;
       border-radius: 50%;
-      background: rgba(15, 15, 18, 0.82);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(255, 255, 255, 0.14);
+      backdrop-filter: blur(32px) saturate(190%);
+      -webkit-backdrop-filter: blur(32px) saturate(190%);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      border-top: 1px solid rgba(255, 255, 255, 0.45);
       color: var(--text-main);
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.3);
       transition: all 0.2s ease;
       flex-shrink: 0;
     }
 
     .action-btn:hover {
-      background: rgba(56, 189, 248, 0.2);
-      border-color: rgba(56, 189, 248, 0.5);
+      background: rgba(255, 255, 255, 0.22);
+      border-color: rgba(56, 189, 248, 0.55);
       color: var(--color-accent);
       transform: translateY(-1px);
     }
@@ -176,14 +179,15 @@
       position: fixed;
       top: 72px;
       right: 16px;
-      background: rgba(13, 13, 15, 0.94);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
+      background: rgba(28, 28, 32, 0.85);
+      backdrop-filter: blur(35px) saturate(190%);
+      -webkit-backdrop-filter: blur(35px) saturate(190%);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-top: 1px solid rgba(255, 255, 255, 0.35);
+      border-radius: 18px;
       padding: 8px;
       min-width: 210px;
-      box-shadow: 0 16px 35px rgba(0, 0, 0, 0.85);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
       z-index: 105;
     }
 
@@ -206,7 +210,7 @@
       text-decoration: none;
       font-size: 13px;
       font-weight: 600;
-      border-radius: 10px;
+      border-radius: 12px;
       cursor: pointer;
       transition: all 0.15s ease;
     }
@@ -220,7 +224,7 @@
     }
 
     .popover-menu a:hover {
-      background: rgba(56, 189, 248, 0.15);
+      background: rgba(255, 255, 255, 0.12);
       color: var(--color-accent);
     }
 
@@ -229,9 +233,9 @@
       display: none; 
       position: fixed; 
       inset: 0; 
-      background: rgba(0, 0, 0, 0.88); 
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
+      background: rgba(0, 0, 0, 0.85); 
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       z-index: 999; 
       padding: 16px; 
       overflow-y: auto; 
@@ -272,10 +276,11 @@
     .search-input-field { 
       width: 100%; 
       height: 46px; 
-      background: rgba(15, 15, 18, 0.82); 
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      border: 1px solid rgba(255, 255, 255, 0.16); 
+      background: rgba(255, 255, 255, 0.14); 
+      backdrop-filter: blur(32px) saturate(190%);
+      -webkit-backdrop-filter: blur(32px) saturate(190%);
+      border: 1px solid rgba(255, 255, 255, 0.28); 
+      border-top: 1px solid rgba(255, 255, 255, 0.45);
       border-radius: 9999px; 
       padding: 0 18px 0 44px; 
       color: var(--text-main); 
@@ -283,7 +288,7 @@
       font-family: inherit;
       outline: none; 
       transition: all 0.2s ease;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
     }
 
     .search-input-field::placeholder {
@@ -292,14 +297,15 @@
 
     .search-input-field:focus { 
       border-color: var(--color-accent); 
-      box-shadow: 0 0 16px rgba(56, 189, 248, 0.25); 
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.35); 
     }
 
     .modal-close-btn { 
-      background: rgba(15, 15, 18, 0.82); 
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      border: 1px solid rgba(255, 255, 255, 0.16); 
+      background: rgba(255, 255, 255, 0.14); 
+      backdrop-filter: blur(32px) saturate(190%);
+      -webkit-backdrop-filter: blur(32px) saturate(190%);
+      border: 1px solid rgba(255, 255, 255, 0.28); 
+      border-top: 1px solid rgba(255, 255, 255, 0.45);
       color: var(--text-main); 
       cursor: pointer; 
       width: 46px;
@@ -309,13 +315,13 @@
       align-items: center; 
       justify-content: center; 
       transition: all 0.2s ease;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
       flex-shrink: 0;
     }
 
     .modal-close-btn:hover {
-      background: rgba(239, 68, 68, 0.2);
-      border-color: rgba(239, 68, 68, 0.5);
+      background: rgba(239, 68, 68, 0.25);
+      border-color: rgba(239, 68, 68, 0.55);
       color: #ef4444;
       transform: translateY(-1px);
     }
@@ -333,9 +339,9 @@
     }
 
     .search-badge-source { 
-      background: rgba(56, 189, 248, 0.12); 
+      background: rgba(56, 189, 248, 0.16); 
       color: var(--color-accent); 
-      border: 1px solid rgba(56, 189, 248, 0.3); 
+      border: 1px solid rgba(56, 189, 248, 0.35); 
       padding: 2.5px 10px; 
       border-radius: 9999px; 
       font-weight: 700; 
@@ -351,8 +357,8 @@
     .search-item-card { 
       display: flex; 
       gap: 14px; 
-      background: rgba(18, 18, 20, 0.65); 
-      border: 1px solid rgba(255, 255, 255, 0.08); 
+      background: rgba(255, 255, 255, 0.05); 
+      border: 1px solid rgba(255, 255, 255, 0.1); 
       border-radius: 14px; 
       padding: 10px; 
       cursor: pointer; 
@@ -361,7 +367,7 @@
     }
 
     .search-item-card:hover {
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.08);
       border-color: rgba(56, 189, 248, 0.4);
     }
 
@@ -473,7 +479,7 @@
       flex: 0 0 calc((100% - 24px) / 3); 
       min-width: calc((100% - 24px) / 3); 
       cursor: pointer; 
-      text-decoration: none; 
+      text-decoration: none !important; 
       display: block; 
     }
 
@@ -489,11 +495,13 @@
     }
     .card-continue-img-wrapper img, .card-grid-img-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
     
+    /* BADGE ATAS & BAWAH FULL ROUNDED (KAPSUL) & TANPA BORDER DI EP */
     .badge-ep { 
       position: absolute; top: 8px; left: 8px; 
       background: rgba(2, 132, 199, 0.9);
       color: var(--text-main); font-size: 9px; font-weight: 800; 
-      padding: 3px 7px; border-radius: 6px; z-index: 2; text-transform: uppercase; 
+      padding: 3.5px 9px; border-radius: 9999px; z-index: 2; text-transform: uppercase; 
+      border: none;
     }
     .badge-ep.movie { background: rgba(245, 158, 11, 0.95); color: #000; }
 
@@ -505,28 +513,39 @@
 
     .badge-bottom { 
       background: rgba(15, 23, 42, 0.95); color: var(--color-accent); 
-      border: 1px solid rgba(56, 189, 248, 0.3); 
-      font-size: 9px; font-weight: 700; padding: 2.5px 6px; border-radius: 6px; 
+      border: none; /* HAPUS BORDER */
+      font-size: 9.5px; font-weight: 800; padding: 3px 9px; border-radius: 9999px; /* FULL ROUNDED */
       white-space: nowrap;
     }
-    .badge-bottom.movie { color: #fbbf24; border-color: rgba(245, 158, 11, 0.35); }
+    .badge-bottom.movie { color: #fbbf24; }
+
+    /* HAPUS GARIS WARNA & GARIS BAWAH PADA JUDUL */
+    .card-grid {
+      text-decoration: none !important;
+      border: none !important;
+      outline: none !important;
+    }
 
     .card-title { 
       margin-top: 8px; 
-      font-size: 13px; 
+      font-size: 13.5px; 
       font-weight: 700; 
-      color: #e2e8f0; 
+      color: #ffffff; 
       line-height: 1.35;
       display: -webkit-box; 
       -webkit-line-clamp: 2; 
       -webkit-box-orient: vertical; 
       overflow: hidden; 
+      text-decoration: none !important; 
+      border: none !important;
+      background: none !important;
     }
+
     .see-all-btn { color: var(--color-accent); font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none; border: none; background: none; }
     .see-all-btn.movie { color: var(--color-movie); }
 
     /* ========================================================
-       FEATURED CARD: SINOPSIS 3 BARIS & KATEGORI TANPA BATAS
+       FEATURED CARD: POPULER HARI INI & DONGHUA POPULER
        ======================================================== */
     .popular-featured-row {
       display: flex;
@@ -545,10 +564,11 @@
       display: flex;
       gap: 14px;
       align-items: stretch;
-      text-decoration: none;
+      text-decoration: none !important;
       cursor: pointer;
       scroll-snap-align: start;
       transition: transform 0.2s ease;
+      border: none !important;
     }
 
     .popular-vertical-list {
@@ -628,20 +648,29 @@
       -webkit-box-orient: vertical;
       overflow: hidden;
       flex-shrink: 0;
+      text-decoration: none !important;
+      border: none !important;
     }
 
-    /* Sinopsis tepat 3 baris */
+    /* KELAS DETEKSI BARIS SINOPSIS */
     .featured-synopsis {
       font-size: 11px;
       color: #94a3b8;
       line-height: 1.4;
       display: -webkit-box;
-      -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
       overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    /* Kategori tanpa batas potongan teks */
+    .featured-synopsis.clamp-3 {
+      -webkit-line-clamp: 3;
+    }
+
+    .featured-synopsis.clamp-5 {
+      -webkit-line-clamp: 5;
+    }
+
     .featured-genres {
       font-size: 11px;
       color: #64748b;
@@ -685,16 +714,17 @@
       width: 44px;
       height: 44px;
       border-radius: 50%;
-      background: rgba(15, 15, 18, 0.85);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(255, 255, 255, 0.14);
+      backdrop-filter: blur(32px) saturate(190%);
+      -webkit-backdrop-filter: blur(32px) saturate(190%);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      border-top: 1px solid rgba(255, 255, 255, 0.45);
       color: var(--text-main);
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.65);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
       transition: all 0.25s ease;
       opacity: 0;
       visibility: hidden;
@@ -708,8 +738,8 @@
     }
 
     .floating-circle-btn:hover {
-      background: rgba(56, 189, 248, 0.2);
-      border-color: rgba(56, 189, 248, 0.5);
+      background: rgba(255, 255, 255, 0.22);
+      border-color: rgba(56, 189, 248, 0.55);
       color: var(--color-accent);
       transform: translateY(-2px);
     }
@@ -916,7 +946,7 @@
       </div>
     </section>
 
-    <!-- 5. DONGHUA POPULER (TAMPILAN SAMA DENGAN POPULER HARI INI, LIST KE BAWAH, MAKSIMAL 6) -->
+    <!-- 5. DONGHUA POPULER (SUSUNAN KE BAWAH, MAKSIMAL 6) -->
     <section class="section-block">
       <div class="section-header-flex">
         <h2 class="section-title">
@@ -1167,7 +1197,7 @@
       }, 4000);
     }
 
-    /* KARTU GAYA GAMBAR TAUTAN (DIGUNAKAN UNTUK POPULER HARI INI & DONGHUA POPULER) */
+    /* KARTU POPULER (DIPAKAI DI POPULER HARI INI & DONGHUA POPULER) */
     function createPopularFeaturedCard(item) {
       const card = document.createElement('a');
       card.className = 'popular-featured-card';
@@ -1181,9 +1211,9 @@
       const epNum = item['latest-episode'] || (item.episode ? item.episode.replace(/[^0-9]/g, '') : '1');
       const badgeText = isMovie ? 'Movie' : `Ep ${epNum} / ${statusText === 'COMPLETED' ? 'Completed' : 'Ongoing'}`;
 
-      const synopsisText = item.synopsis || item.description || item.desc || `${titleText} – Dunia tanpa sihir, tanpa pertempuran Dou Qi, namun memiliki Martial Soul yang megah. Ikuti petualangan legendaris Tang Sect di benua Douluo yang penuh rintangan mistis dan pertempuran epik melawan takdir[span_0](start_span)[span_0](end_span).`;
+      const synopsisText = item.synopsis || item.description || item.desc || `${titleText} menceritakan petualangan kultivasi tanpa sihir yang penuh pertempuran hebat di benua persilatan spiritual melawan takdir. Menampilkan animasi menawan, aksi bela diri tingkat tinggi, dan persahabatan yang kuat.`;
 
-      // Kategori tanpa batas pemotongan array (ditampilkan seluruhnya)
+      // Kategori tanpa batas pemotongan array
       let genresFormatted = 'Action • Adventure • Fantasy • Romance';
       if (Array.isArray(item.genres) && item.genres.length > 0) {
         genresFormatted = item.genres.join(' • ');
@@ -1209,6 +1239,29 @@
       return card;
     }
 
+    /* PENYESUAIAN DETEKSI JUMLAH BARIS JUDUL UNTUK SINOPSIS */
+    function adjustSynopsisLines(container) {
+      requestAnimationFrame(() => {
+        const cards = container.querySelectorAll('.popular-featured-card');
+        cards.forEach(card => {
+          const titleEl = card.querySelector('.featured-title');
+          const synopsisEl = card.querySelector('.featured-synopsis');
+          if (!titleEl || !synopsisEl) return;
+
+          // Periksa tinggi elemen judul (tinggi 1 baris kira-kira <= 25px)
+          const titleHeight = titleEl.offsetHeight;
+          if (titleHeight <= 26) {
+            synopsisEl.classList.remove('clamp-3');
+            synopsisEl.classList.add('clamp-5'); // Jika 1 baris, tampilkan 5 baris
+          } else {
+            synopsisEl.classList.remove('clamp-5');
+            synopsisEl.classList.add('clamp-3'); // Jika 2 baris, tampilkan 3 baris
+          }
+        });
+      });
+    }
+
+    /* KARTU GRID UNTUK DONGHUA & MOVIE TERBARU (HAPUS GARIS WARNA & BADGE FULL ROUNDED) */
     function createGridCard(item) {
       const card = document.createElement('a');
       card.className = 'card-grid';
@@ -1290,6 +1343,7 @@
         list.forEach(item => {
           if (item && item.title) targetElement.appendChild(createPopularFeaturedCard(item));
         });
+        adjustSynopsisLines(targetElement);
       } else {
         targetElement.innerHTML = '<p style="color: var(--text-muted); font-size: 12px;">Data tidak tersedia.</p>';
       }
@@ -1321,7 +1375,7 @@
         // 3. Movie Terbaru (12 Item Grid)
         renderGridItems(movieList.slice(0, 12), movieGrid);
 
-        // 4. Donghua Populer (Dibatasi 6 item saja, disusun ke bawah menggunakan card yang sama)
+        // 4. Donghua Populer (Dibatasi 6 item saja, disusun ke bawah)
         renderPopularFeatured(donghuaList.slice(6, 12), popAllGrid);
 
       } catch (e) {
@@ -1363,6 +1417,13 @@
         row.appendChild(card);
       });
     }
+
+    window.addEventListener('resize', () => {
+      const todayPopularRow = document.getElementById('todayPopularRow');
+      const popAllGrid = document.getElementById('popularAllGrid');
+      if (todayPopularRow) adjustSynopsisLines(todayPopularRow);
+      if (popAllGrid) adjustSynopsisLines(popAllGrid);
+    });
 
     window.onload = () => {
       loadMainData();
